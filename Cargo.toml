@@ -1,0 +1,20 @@
+[package]
+name = "paddle"
+version = "0.1.0"
+edition = "2021"
+
+[profile.release]
+opt-level = "s" # Optimize for size
+
+[profile.release.package."*"]
+opt-level = "s" # Optimize for size
+
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[dependencies]
+bevy = { version = "0.11" }
+bevy-inspector-egui = "0.19.0"

@@ -1,0 +1,32 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "environment": [
+        {"name":"PATH", "value":"%USERPROFILE%/.rustup/toolchains/stable-x86_64-pc-windows-msvc/bin;${workspaceFolder}/target/debug/deps;%PATH%"}
+    ],
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'paddle'",
+            "cargo": {
+                "args": [
+                    "run",
+                    "--bin=paddle"
+                ],
+                "filter": {
+                    "name": "paddle",
+                    "kind": "bin"
+                }
+            },
+            "env": {
+                "CARGO_MANIFEST_DIR": "${workspaceFolder}",
+                "PATH": "${env:USERPROFILE}/.rustup/toolchains/stable-x86_64-pc-windows-msvc/bin;${workspaceFolder}/target/debug/deps;${env:PATH}",
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
