@@ -13,17 +13,33 @@
             "name": "Debug executable 'paddle'",
             "cargo": {
                 "args": [
-                    "run",
-                    "--bin=paddle"
+                    "build",
+                    "--bin=paddle",
+                    "--package=paddle"
                 ],
                 "filter": {
                     "name": "paddle",
                     "kind": "bin"
                 }
             },
-            "env": {
-                "CARGO_MANIFEST_DIR": "${workspaceFolder}",
-                "PATH": "${env:USERPROFILE}/.rustup/toolchains/stable-x86_64-pc-windows-msvc/bin;${workspaceFolder}/target/debug/deps;${env:PATH}",
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'paddle'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=paddle",
+                    "--package=paddle"
+                ],
+                "filter": {
+                    "name": "paddle",
+                    "kind": "bin"
+                }
             },
             "args": [],
             "cwd": "${workspaceFolder}"

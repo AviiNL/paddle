@@ -1,4 +1,4 @@
-use bevy::{core_pipeline::clear_color::ClearColorConfig, prelude::*, render::camera::ScalingMode};
+use bevy::prelude::*;
 use bevy_inspector_egui::{prelude::ReflectInspectorOptions, InspectorOptions};
 
 use crate::{
@@ -32,18 +32,6 @@ impl Plugin for GamePlugin {
 }
 
 fn setup(mut commands: Commands) {
-    let mut camera = Camera2dBundle::default();
-
-    camera.projection.scaling_mode = ScalingMode::AutoMin {
-        min_width: 256.0,
-        min_height: 144.0,
-    };
-
-    // camera background color black
-    camera.camera_2d.clear_color = ClearColorConfig::Custom(Color::BLACK);
-
-    commands.spawn(camera);
-
     // create the center line, 2px width, dashed line
     commands.spawn((
         Name::new("Center Line"),
