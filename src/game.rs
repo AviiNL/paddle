@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use bevy_inspector_egui::{prelude::ReflectInspectorOptions, InspectorOptions};
-use bevy_magic_light_2d::prelude::{OmniLightSource2D, SkylightLight2D};
+use bevy_magic_light_2d::prelude::*;
 
 use crate::{
     ai::{AiPlugin, AI},
