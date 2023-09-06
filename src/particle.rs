@@ -21,21 +21,20 @@ fn setup(mut commands: Commands, mut effects: ResMut<Assets<EffectAsset>>) {
     color_gradient1.add_key(1.0, Vec4::splat(0.0));
 
     let mut size_gradient1 = Gradient::new();
-    size_gradient1.add_key(0.0, Vec2::splat(0.1));
-    size_gradient1.add_key(0.5, Vec2::splat(0.5));
-    size_gradient1.add_key(0.8, Vec2::splat(0.08));
-    size_gradient1.add_key(1.0, Vec2::splat(0.0));
+    size_gradient1.add_key(0.0, Vec2::splat(0.5));
+    size_gradient1.add_key(0.5, Vec2::splat(0.8));
+    size_gradient1.add_key(0.8, Vec2::splat(0.5));
+    size_gradient1.add_key(1.0, Vec2::splat(0.2));
 
     let writer1 = ExprWriter::new();
 
     let accel1 = writer1.lit(Vec3::Y * -300.).expr();
     let update_accel1 = AccelModifier::new(accel1);
 
-    let init_pos = SetPositionCone3dModifier {
-        base_radius: writer1.lit(0.).expr(),
-        top_radius: writer1.lit(2.).expr(),
-        height: writer1.lit(5.).expr(),
-        dimension: ShapeDimension::Surface,
+    let init_pos = SetPositionSphereModifier {
+        dimension: ShapeDimension::Volume,
+        center: writer1.lit(Vec3::ZERO).expr(),
+        radius: writer1.lit(10.).expr(),
     };
 
     let init_vel = SetVelocitySphereModifier {
@@ -52,11 +51,10 @@ fn setup(mut commands: Commands, mut effects: ResMut<Assets<EffectAsset>>) {
     // Create a new effect asset spawning 30 particles per second from a circle
     // and slowly fading from blue-ish to transparent over their lifetime.
     // By default the asset spawns the particles at Z=0.
-    let spawner = Spawner::once(30.0.into(), false);
+    let spawner = Spawner::once(80.0.into(), false);
     let effect = effects.add(
         EffectAsset::new(32768, spawner, writer1.finish())
             .with_name("emit:rate")
-            .with_property("my_accel", Vec3::new(0., -3., 0.).into())
             .init(init_pos)
             // Make spawned particles move away from the emitter origin
             .init(init_vel)

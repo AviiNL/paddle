@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use bevy_inspector_egui::{prelude::ReflectInspectorOptions, InspectorOptions};
+use bevy_magic_light_2d::prelude::{OmniLightSource2D, SkylightLight2D};
 
 use crate::{
     ai::{AiPlugin, AI},
@@ -44,6 +45,10 @@ fn setup(mut commands: Commands) {
                 ..default()
             },
             ..Default::default()
+        },
+        SkylightLight2D {
+            intensity: 0.001,
+            color: Color::WHITE,
         },
     ));
 }

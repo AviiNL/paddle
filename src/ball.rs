@@ -1,6 +1,7 @@
 use bevy::sprite::collide_aabb::collide;
 use bevy::{prelude::*, sprite::collide_aabb::Collision};
 use bevy_inspector_egui::{prelude::ReflectInspectorOptions, InspectorOptions};
+use bevy_magic_light_2d::prelude::*;
 
 use crate::particle::SpawnParticle;
 use crate::{AppState, Paddle};
@@ -42,6 +43,15 @@ fn setup(mut commands: Commands) {
             },
             ..Default::default()
         },
+        OmniLightSource2D {
+            intensity: 0.05,
+            color: Color::rgb_u8(255, 255, 255), // randomize on each hit
+            falloff: Vec3::new(0.15, 0.25, 0.005),
+            ..default()
+        },
+        LightOccluder2D {
+            h_size: Vec2::new(4.0, 4.0),
+        },
     ));
 }
 
@@ -52,14 +62,15 @@ fn move_ball(mut query: Query<(&Ball, &mut Transform)>, time: Res<Time>) {
 }
 
 fn ball_paddle_collision(
-    mut ball_query: Query<(&mut Ball, &mut Transform), Without<Paddle>>,
-    paddle_query: Query<&Transform, With<Paddle>>,
+    mut ball_query: Query<(&mut Ball, &mut Transform, &mut OmniLightSource2D), Without<Paddle>>,
+    paddle_query: Query<(&OmniLightSource2D, &Transform), With<Paddle>>,
     mut particle_event: EventWriter<SpawnParticle>,
 ) {
     let mut ball = ball_query.single_mut();
     let mut ball_transform = ball.1;
+    let mut ball_light = ball.2;
 
-    for paddle_transform in &paddle_query {
+    for (paddle_light, paddle_transform) in &paddle_query {
         let paddle_size = Vec2::new(4.0, 16.0);
         let ball_size = Vec2::new(4.0, 4.0);
 
@@ -113,8 +124,13 @@ fn ball_paddle_collision(
             * -Quat::from_rotation_z(std::f32::consts::FRAC_PI_2)
             * Quat::from_rotation_z(std::f32::consts::PI);
 
+        // particle position is in between the ball and the paddle, calculate
+        let particle_position = ball_transform.translation
+            + (paddle_transform.translation - ball_transform.translation) / 2.0;
+
+        ball_light.color = paddle_light.color;
         particle_event.send(SpawnParticle {
-            position: ball_transform.translation,
+            position: particle_position,
             rotation: particle_rotation,
         });
     }

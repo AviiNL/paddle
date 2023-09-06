@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use bevy_inspector_egui::{prelude::ReflectInspectorOptions, InspectorOptions};
+use bevy_magic_light_2d::prelude::{LightOccluder2D, OmniLightSource2D};
 
 use crate::{ball::Ball, AppState, Paddle, Score};
 
@@ -29,6 +30,15 @@ fn setup(mut commands: Commands) {
                 ..default()
             },
             ..Default::default()
+        },
+        OmniLightSource2D {
+            intensity: 0.2,
+            color: Color::rgb_u8(255, 28, 28),
+            falloff: Vec3::new(0.15, 0.25, 0.005),
+            ..default()
+        },
+        LightOccluder2D {
+            h_size: Vec2::new(4.0, 16.0),
         },
     ));
 }
